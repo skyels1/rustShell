@@ -11,8 +11,8 @@ project to learn the basics of rust
 ## Installation and guide
 
 `git clone https://github.com/skyels1/rustShell.git`\
-`cargo build`
-`cargo run`
+`cargo build`\
+`cargo run`\
 or hit run inside vscode if you have code runner installed
 
 should be same on both windows and linux
