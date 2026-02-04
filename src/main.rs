@@ -1,9 +1,17 @@
 use std::io; // obvious
 use std::io::Write; // this allows flush on stdout
 use std::process::Command; // used to take in commands
-use std::env;
-use std::fs;
-use std::path::Path;
+use std::env; // changing dir
+use std::fs; // reading files
+use std::path::Path; // used to get ls to list files
+
+fn builtin_cat<'a>(mut parts: impl Iterator<Item = &'a str>) -> io::Result<()> {
+    let path = parts.next().unwrap_or(".");
+    let contents = fs::read_to_string(path)
+        .expect("File not found");
+    println!("{}", contents);
+    Ok(())
+}
 
 fn builtin_cd<'a>(mut parts: impl Iterator<Item = &'a str>) -> io::Result<()> {
     let path = parts.next().unwrap_or(".");
@@ -68,7 +76,7 @@ fn main() {
                 // cd command
                 if command == "cd" {
                     if let Err(e) = builtin_cd(parts) {
-                        eprintln!("ls: {}", e)
+                        eprintln!("cd: {}", e)
                     }
                     continue;
                 }
@@ -77,6 +85,14 @@ fn main() {
                 if command == "pwd" {
                     if let Err(e) = builtin_pwd() {
                         eprintln!("pwd: {}", e)
+                    }
+                    continue;
+                }
+
+                // cat command
+                if command == "cat" {
+                    if let Err(e) = builtin_cat(parts) {
+                        eprintln!("cat: {}", e)
                     }
                     continue;
                 }

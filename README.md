@@ -2,16 +2,16 @@
 
 project to learn the basics of rust
 
-## Plans for features
+## Usage
 
- - [x] get a working `ls` command for linux and windows
- - [x] get a working `pwd` command
- - [x] get a working `cd` command
- - [ ] get nano to work
- - [x] external commands
- - [ ] piping between commands
- - [ ] get `grep` to work
- - [ ] move to a full terminal emulator
+type any system command and hit enter
+
+all commands should work the same as any linux terminal or git bash
+
+to quit type `q` and hit enter
+can change dir with cd and change to other drives with
+`cd X:`
+where X is the drive you want to switch to
 
 ## Installation and guide
 
@@ -22,11 +22,17 @@ or hit run inside vscode if you have code runner installed
 
 should be same on both windows and linux
 
-## Usage
+## Plans for features
 
-type any system command and hit enter
-
-to quit type `q` and hit enter
+ - [x] get a working `ls` command for linux and windows
+ - [x] get a working `pwd` command
+ - [x] get a working `cd` command
+ - [ ] get nano to work
+ - [x] get working `cat` command
+ - [x] external commands
+ - [ ] piping between commands
+ - [ ] get `grep` to work
+ - [ ] move to a full terminal emulator
 
 ## Acknowledgements
 
