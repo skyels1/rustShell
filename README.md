@@ -4,7 +4,7 @@ project to learn the basics of rust
 
 ## Plans for features
 
- - [ ] get a working `ls` command for linux and windows
+ - [x] get a working `ls` command for linux and windows
  - [x] external commands
  - [ ] piping between commands
 
