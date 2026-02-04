@@ -1,10 +1,33 @@
 use std::io; // obvious
 use std::io::Write; // this allows flush on stdout
 use std::process::Command; // used to take in commands
+use std::env;
+use std::fs;
+use std::path::Path;
+
+fn builtin_ls<'a>(mut parts: impl Iterator<Item = &'a str>) -> io::Result<()> {
+    let path = parts.next().unwrap_or(".");
+    let path = Path::new(path);
+
+    for entry in fs::read_dir(path)? {
+        let entry = entry?;
+        print!("{}  ", entry.file_name().to_string_lossy());
+    }
+
+    println!();
+    Ok(())
+}
+
+fn builtin_pwd() -> io::Result<()> {
+    let dir = env::current_dir()?;
+    println!("{}", dir.display());
+    Ok(())
+}
 
 fn main() {
     loop {
-        print!("> ");
+        let cwd = env::current_dir().unwrap_or_else(|_| "?".into());
+        print!("{}> ", cwd.display());
         io::stdout().flush().unwrap();
         let mut input = String::new();
 
@@ -13,12 +36,34 @@ fn main() {
             Ok(0) => break,
             Ok(_) => {
 
-                let mut parts = input.trim().split_whitespace(); // create parts and split to get the command
+                // create parts and split to get the command
+                let mut parts = input.trim().split_whitespace();
                 let command = parts.next().unwrap_or("");
 
-                if command == "q" { // shell closing handling 
-                    print!("closing shell...");
+                // shell closing handling
+                if command == "q" { 
+                    println!("closing shell...");
                     break;
+                }
+
+                if command == "" {
+                    continue;
+                }
+
+                // ls command work around for windows (bad work around but initial works)
+                if command == "ls" {
+                    if let Err(e) = builtin_ls(parts) {
+                        eprintln!("ls: {}", e)
+                    }
+                    continue;
+                }
+
+                // pwd command
+                if command == "pwd" {
+                    if let Err(e) = builtin_pwd() {
+                        eprintln!("pwd: {}", e)
+                    }
+                    continue;
                 }
 
                 match Command::new(command)
