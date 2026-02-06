@@ -4,11 +4,17 @@ use std::process::Command; // used to take in external commands
 use std::env; // changing environment variables
 use std::fs; // file system
 use std::path::Path; // used to get ls to list files
+use std::fs::File;
+use std::io::BufReader; // for better cat with big files
+use std::io::prelude::*; // not even sure what this is for
 
-// function for cat to take in the path and show the contents
 fn builtin_cat<'a>(mut parts: impl Iterator<Item = &'a str>) -> io::Result<()> {
     let path = parts.next().unwrap_or(".");
-    let contents = fs::read_to_string(path)?;
+    let f = File::open(path)?;
+    let mut reader = BufReader::new(f);
+    let mut contents = String::new();
+    reader.read_to_string(&mut contents)?;
+
     println!("{}", contents);
     Ok(())
 }
@@ -27,7 +33,7 @@ fn builtin_ls<'a>(mut parts: impl Iterator<Item = &'a str>) -> io::Result<()> {
 
     for entry in fs::read_dir(path)? {
         let entry = entry?;
-        print!("{}  ", entry.file_name().to_string_lossy());
+        println!("{}  ", entry.file_name().to_string_lossy());
     }
 
     println!();
