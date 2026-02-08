@@ -32,7 +32,8 @@ should be same on both windows and linux
  - [x] get a working `cd` command
  - [x] get working `cat` command
  - [x] get `grep` to work
- - [ ] get nano to work
+ - [x] get nano to work (kind of)
+        only works on linux/git bash, on windows just do `notepad file`
  - [ ] piping between commands
  - [ ] move to a full terminal emulator
 

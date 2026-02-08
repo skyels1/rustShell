@@ -6,7 +6,8 @@ use std::fs; // file system
 use std::path::Path; // used to get ls to list files
 use std::fs::File;
 use std::io::BufReader; // for better cat with big files
-use std::io::prelude::*; // not even sure what this is for
+use std::io::prelude::*;
+use std::process::Stdio; // not even sure what this is for
 
 fn builtin_grep<'a>(mut parts: impl Iterator<Item = &'a str>) -> io::Result<()> {
     let pattern = parts.next().unwrap_or(".");
@@ -15,7 +16,7 @@ fn builtin_grep<'a>(mut parts: impl Iterator<Item = &'a str>) -> io::Result<()> 
     let reader = BufReader::new(f);
     for line in reader.lines() {
         let line = line?;
-        if line.contains(pattern) {
+        if line.to_lowercase().contains(&pattern.to_lowercase()) {
             println!("{}", line)
         }
     }
@@ -131,6 +132,9 @@ fn main() {
 
                 match Command::new(command)
                     .args(parts)
+                    .stdin(Stdio::inherit())
+                    .stdout(Stdio::inherit())
+                    .stderr(Stdio::inherit())
                     .status() // supposedly better here than output to handle crashing?
                 {
                     Ok(status) => {
